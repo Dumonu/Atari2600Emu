@@ -8,9 +8,9 @@
 uint8_t TAY(uint8_t op, uint8_t arg0, uint8_t arg1)
 {
     Y = A;                          // Y = A
-    P = P & 0x3F;                   // 0 out the Flags we're setting
+    P = P & 0x7D;                   // 0 out the Flags we're setting
     P = P | (Y & 0x80);             // Negative/Sign Flag
-    P = P | (Y != 0 ? 0x40 : 0x00); // Zero Flag
+    P = P | (Y != 0 ? 0x02 : 0x00); // Zero Flag
     ++PC;
     tick(2);
     return 0;
@@ -19,9 +19,9 @@ uint8_t TAY(uint8_t op, uint8_t arg0, uint8_t arg1)
 uint8_t TAX(uint8_t op, uint8_t arg0, uint8_t arg1)
 {
     X = A;                          // X = A
-    P = P & 0x3F;                   // 0 out the Flags we're setting
+    P = P & 0x7D;                   // 0 out the Flags we're setting
     P = P | (X & 0x80);             // Negative/Sign Flag
-    P = P | (X != 0 ? 0x40 : 0x00); // Zero Flag
+    P = P | (X != 0 ? 0x02 : 0x00); // Zero Flag
     ++PC;
     tick(2);
     return 0;
@@ -30,9 +30,9 @@ uint8_t TAX(uint8_t op, uint8_t arg0, uint8_t arg1)
 uint8_t TSX(uint8_t op, uint8_t arg0, uint8_t arg1)
 {
     X = S;                          // Y = A
-    P = P & 0x3F;                   // 0 out the Flags we're setting
+    P = P & 0x7D;                   // 0 out the Flags we're setting
     P = P | (X & 0x80);             // Negative/Sign Flag
-    P = P | (X != 0 ? 0x40 : 0x00); // Zero Flag
+    P = P | (X != 0 ? 0x02 : 0x00); // Zero Flag
     ++PC;
     tick(2);
     return 0;
@@ -41,9 +41,9 @@ uint8_t TSX(uint8_t op, uint8_t arg0, uint8_t arg1)
 uint8_t TYA(uint8_t op, uint8_t arg0, uint8_t arg1)
 {
     A = Y;                          // A = Y
-    P = P & 0x3F;                   // 0 out the Flags we're setting
+    P = P & 0x7D;                   // 0 out the Flags we're setting
     P = P | (A & 0x80);             // Negative/Sign Flag
-    P = P | (A != 0 ? 0x40 : 0x00); // Zero Flag
+    P = P | (A != 0 ? 0x02 : 0x00); // Zero Flag
     ++PC;
     tick(2);
     return 0;
@@ -52,9 +52,9 @@ uint8_t TYA(uint8_t op, uint8_t arg0, uint8_t arg1)
 uint8_t TXA(uint8_t op, uint8_t arg0, uint8_t arg1)
 {
     A = X;                          // A = X
-    P = P & 0x3F;                   // 0 out the Flags we're setting
+    P = P & 0x7D;                   // 0 out the Flags we're setting
     P = P | (A & 0x80);             // Negative/Sign Flag
-    P = P | (A != 0 ? 0x40 : 0x00); // Zero Flag
+    P = P | (A != 0 ? 0x02 : 0x00); // Zero Flag
     ++PC;
     tick(2);
     return 0;
@@ -127,9 +127,9 @@ uint8_t LDA(uint8_t op, uint8_t arg0, uint8_t arg1)
 
     }
     A = src;
-    P = P & 0x3F;                   // 0 out the Flags we're setting
+    P = P & 0x7D;                   // 0 out the Flags we're setting
     P = P | (A & 0x80);             // Negative/Sign Flag
-    P = P | (A != 0 ? 0x40 : 0x00); // Zero Flag
+    P = P | (A != 0 ? 0x02 : 0x00); // Zero Flag
     return 0;
     
 }
