@@ -65,4 +65,5 @@ but doing so would most likely be superfluous. By extension, there is, as of yet
 means of using the Atari 2600 Emulator.
 
 If you must use it, the proper manner, insofar as there may or may not be one, is:
+    
     vim a2600.c
