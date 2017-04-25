@@ -31,3 +31,27 @@ uint8_t und(uint8_t op, uint8_t arg0, uint8_t arg1)
     fprintf(stderr, "Undefined Opcode Called");
     exit(1);
 }
+
+
+// ................................................................................................
+// MEMORY I/O
+// ................................................................................................
+
+uint8_t read(int ind)
+{
+    switch(ind)
+    {
+    case default:
+        return MEMORY[ind];
+        break;
+    }
+}
+void write(int ind, uint8_t val)
+{
+    switch(ind)
+    {
+    case default:
+        MEMORY[ind] = val;
+        break;
+    }
+}

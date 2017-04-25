@@ -95,6 +95,9 @@ uint8_t (*ops[16][16])(uint8_t op, uint8_t arg0, uint8_t arg1) = {
 
 
 uint8_t MEMORY[0x10000];
+// Put an abstraction layer on the MEMORY, because IO Ports are also part of the memory space;
+uint8_t read(int ind);
+void write(int ind, uint8_t val);
 //0000-002C     TIA Write
 //0000-000D     TIA Read            (sometimes mirrored at 0030-003D)
 //0080-00FF     PIA RAM             (128 bytes)

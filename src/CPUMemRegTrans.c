@@ -10,7 +10,7 @@ uint8_t TAY(uint8_t op, uint8_t arg0, uint8_t arg1)
     Y = A;                          // Y = A
     P = P & 0x7D;                   // 0 out the Flags we're setting
     P = P | (Y & 0x80);             // Negative/Sign Flag
-    P = P | (Y != 0 ? 0x02 : 0x00); // Zero Flag
+    P = P | (Y != 0 ? 0x00 : 0x02); // Zero Flag
     ++PC;
     tick(2);
     return 0;
@@ -21,7 +21,7 @@ uint8_t TAX(uint8_t op, uint8_t arg0, uint8_t arg1)
     X = A;                          // X = A
     P = P & 0x7D;                   // 0 out the Flags we're setting
     P = P | (X & 0x80);             // Negative/Sign Flag
-    P = P | (X != 0 ? 0x02 : 0x00); // Zero Flag
+    P = P | (X != 0 ? 0x00 : 0x02); // Zero Flag
     ++PC;
     tick(2);
     return 0;
@@ -32,7 +32,7 @@ uint8_t TSX(uint8_t op, uint8_t arg0, uint8_t arg1)
     X = S;                          // Y = A
     P = P & 0x7D;                   // 0 out the Flags we're setting
     P = P | (X & 0x80);             // Negative/Sign Flag
-    P = P | (X != 0 ? 0x02 : 0x00); // Zero Flag
+    P = P | (X != 0 ? 0x00 : 0x02); // Zero Flag
     ++PC;
     tick(2);
     return 0;
@@ -43,7 +43,7 @@ uint8_t TYA(uint8_t op, uint8_t arg0, uint8_t arg1)
     A = Y;                          // A = Y
     P = P & 0x7D;                   // 0 out the Flags we're setting
     P = P | (A & 0x80);             // Negative/Sign Flag
-    P = P | (A != 0 ? 0x02 : 0x00); // Zero Flag
+    P = P | (A != 0 ? 0x00 : 0x02); // Zero Flag
     ++PC;
     tick(2);
     return 0;
@@ -54,7 +54,7 @@ uint8_t TXA(uint8_t op, uint8_t arg0, uint8_t arg1)
     A = X;                          // A = X
     P = P & 0x7D;                   // 0 out the Flags we're setting
     P = P | (A & 0x80);             // Negative/Sign Flag
-    P = P | (A != 0 ? 0x02 : 0x00); // Zero Flag
+    P = P | (A != 0 ? 0x00 : 0x02); // Zero Flag
     ++PC;
     tick(2);
     return 0;
@@ -87,60 +87,105 @@ uint8_t LDA(uint8_t op, uint8_t arg0, uint8_t arg1)
         break;
     // A5 nn    nz----  3   LDA nn  MOV A,[nn]  A=[nn]
     case 0xA5:
-        src = MEMORY[arg0];
+        src = read(arg0);
         tick(3);
         PC += 2;
         break;
     // B5 nn    nz----  4   LDA nn,X    MOV A,[nn+X]    A=[nn+X]
     case 0xB5:
-        src = MEMORY[arg0 + X];
+        src = read((uint8_t)(arg0 + X));
         tick(4);
         PC += 2;
         break;
     // AD nn nn nz----  4   LDA nnnn    MOV A,[nnnn]    A=[nnnn]
     case 0xAD:
         uint16_t addr = (((uint16_t)arg1) << 8) + arg0;
-        src = MEMORY[addr];
+        src = read(addr);
         tick(4);
         PC += 3;
         break;
     // BD nn nn nz----  4*  LDA nnnn,X  MOV A,[nnnn+X]  A=[nnnn+X]
     case 0xBD:
         uint16_t addr = (((uint16_t)arg1) << 8) + arg0 + X;
-        src = MEMORY[addr];
+        src = read(addr);
         tick((addr >> 8) > arg1 ? 5 : 4);
         PC += 3;
         break;
     // B9 nn nn nz----  4*  LDA nnnn,Y  MOV A,[nnnn+Y]  A=[nnnn+Y]
     case 0xB9:
         uint16_t addr = (((uint16_t)arg1) << 8) + arg0 + X;
-        src = MEMORY[addr];
+        src = read(addr);
         tick((addr >> 8) > arg1 ? 5 : 4);
         PC += 3;
         break;
     // A1 nn    nz----  6   LDA (nn,X)  MOV A,[[nn+X]]  A=[word[nn+X]]
     case 0xA1:
-        src = MEMORY[((uint16_t)(MEMORY[arg0 + X + 1]) << 8) + MEMORY[arg0 + X]];
+        src = read(((uint16_t)(read(arg0 + X + 1)) << 8) + read(arg0 + X));
         tick(6);
         PC += 2;
         break;
-
+    // B1 nn    nz----  5*  LDA (nn),Y  MOV A,[[nn]+Y]  A=[word[nn]+Y]
+    case 0xB1:
+        uint16_t addr = (uint16_t)(read(arg0 + 1) << 8) + read(arg0);
+        src = read(addr + Y);
+        tick(((addr + Y) >> 8) > (addr >> 8) ? 6 : 5);
+        PC += 2;
+        break; 
     }
     A = src;
     P = P & 0x7D;                   // 0 out the Flags we're setting
     P = P | (A & 0x80);             // Negative/Sign Flag
-    P = P | (A != 0 ? 0x02 : 0x00); // Zero Flag
+    P = P | (A != 0 ? 0x00 : 0x02); // Zero Flag
     return 0;
     
 }
-// LDA nn
-                                                        // LDA nn,X
-                                                        // LDA nnnn
-                                                        // LDA nnnn,X
-                                                        // LDA nnnn,Y
-                                                        // LDA (nn,X)
-                                                        // LDA (nn),Y
-uint8_t LDX(uint8_t op, uint8_t arg0, uint8_t arg1);    // LDX nn
+
+uint8_t LDX(uint8_t op, uint8_t arg0, uint8_t arg1)
+{
+    uint8_t src = 0;
+    switch(op)
+    {
+    // A2 nn    nz----  2   LDX #nn  MOV X,nn   X=nn
+    case 0xA2:
+        src = arg0;
+        tick(2);
+        PC += 2;
+        break;
+    // A6 nn    nz----  3   LDX nn  MOV X,[nn]  X=[nn]
+    case 0xA6:
+        src = read(arg0);
+        tick(3);
+        PC += 2;
+        break;
+    // B6 nn    nz----  4   LDX nn,Y    MOV X,[nn+Y]    X=[nn+Y]
+    case 0xB6:
+        src = read((uint8_t)(arg0 + Y));
+        tick(4);
+        PC += 2;
+        break;
+    // AE nn nn nz----  4   LDX nnnn    MOV X,[nnnn]    X=[nnnn]
+    case 0xAE:
+        uint16_t addr = (((uint16_t)arg1) << 8) + arg0;
+        src = read(addr);
+        tick(4);
+        PC += 3;
+        break;
+    // BE nn nn nz----  4*  LDX nnnn,Y  MOV X,[nnnn+Y]  X=[nnnn+Y]
+    case 0xBE:
+        uint16_t addr = (((uint16_t)arg1) << 8) + arg0 + Y;
+        src = read(addr);
+        tick((addr >> 8) > arg1 ? 5 : 4);
+        PC += 3;
+        break;
+    }
+    X = src;
+    P = P & 0x7D;                   // 0 out the Flags we're setting
+    P = P | (X & 0x80);             // Negative/Sign Flag
+    P = P | (X != 0 ? 0x00 : 0x02); // Zero Flag
+    return 0;
+
+}
+// LDX nn
                                                         // LDX nn,Y
                                                         // LDX nnnn
                                                         // LDX nnnn,Y
