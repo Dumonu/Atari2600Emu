@@ -26,7 +26,7 @@ Handles illegal and undefined opcodes.
 
 Opcode matrix declaration.
 
-2-byte memory addressing.
+2-byte memory addressing with `read()` and `write()` functions to allow properly handled memory-mapped I/O devices.
 
 The following opcodes:
 * TAY
@@ -35,7 +35,8 @@ The following opcodes:
 * TYA
 * TXA
 * TXS
-* LDA (Mostly)
+* LDA
+* LDX
 
 ## To be Implemented:
 
