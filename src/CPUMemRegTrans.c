@@ -185,38 +185,180 @@ uint8_t LDX(uint8_t op, uint8_t arg0, uint8_t arg1)
     return 0;
 
 }
-// LDX nn
-                                                        // LDX nn,Y
-                                                        // LDX nnnn
-                                                        // LDX nnnn,Y
-uint8_t LDY(uint8_t op, uint8_t arg0, uint8_t arg1);    // LDY nn
-                                                        // LDY nn,X
-                                                        // LDY nnnn
-                                                        // LDY nnnn,X
+uint8_t LDY(uint8_t op, uint8_t arg0, uint8_t arg1)
+{
+    uint8_t src = 0;
+    switch(op)
+    {
+    // A0 nn    nz----  2   LDY #nn  MOV Y,nn   Y=nn
+    case 0xA0:
+        src = arg0;
+        tick(2);
+        PC += 2;
+        break;
+    // A4 nn    nz----  3   LDY nn  MOV Y,[nn]  Y=[nn]
+    case 0xA4:
+        src = read(arg0);
+        tick(3);
+        PC += 2;
+        break;
+    // B4 nn    nz----  4   LDY nn,X    MOV Y,[nn+X]    Y=[nn+X]
+    case 0xB4:
+        src = read((uint8_t)(arg0 + X));
+        tick(4);
+        PC += 2;
+        break;
+    // AC nn nn nz----  4   LDY nnnn    MOV Y,[nnnn]    Y=[nnnn]
+    case 0xAC:
+        uint16_t addr = (((uint16_t)arg1) << 8) + arg0;
+        src = read(addr);
+        tick(4);
+        PC += 3;
+        break;
+    // BC nn nn nz----  4*  LDY nnnn,X  MOV Y,[nnnn+X]  Y=[nnnn+X]
+    case 0xBC:
+        uint16_t addr = (((uint16_t)arg1) << 8) + arg0 + X;
+        src = read(addr);
+        tick((addr >> 8) > arg1 ? 5 : 4);
+        PC += 3;
+        break;
+    }
+    Y = src;
+    P = P & 0x7D;                   // 0 out the Flags we're setting
+    P = P | (Y & 0x80);             // Negative/Sign Flag
+    P = P | (Y != 0 ? 0x00 : 0x02); // Zero Flag
+    return 0;
 
+}
 
 // .................................................
 // STORE REGISTER IN MEMORY
 // .................................................
-uint8_t STA(uint8_t op, uint8_t arg0, uint8_t arg1);    // STA nn
-                                                        // STA nn,X
-                                                        // STA nnnn
-                                                        // STA nnnn,X
-                                                        // STA nnnn,Y
-                                                        // STA (nn,X)
-                                                        // STA (nn),Y
-uint8_t STY(uint8_t op, uint8_t arg0, uint8_t arg1);    // STX nn
-                                                        // STX nn,Y
-                                                        // STX nn,Y
-                                                        // STX nnnn
-uint8_t STX(uint8_t op, uint8_t arg0, uint8_t arg1);    // STY nn
+uint8_t STA(uint8_t op, uint8_t arg0, uint8_t arg1)
+{
+    uint16_t addr = 0;
+
+    switch(op)
+    {
+    // 85 nn    ------  3   STA nn      MOV [nn],A  [nn]=A
+    case 0x85:
+        addr = arg0;
+        tick(3);
+        PC += 2;
+        break;
+    // 95 nn    ------  4   STA nn,X    MOV [nn+X],A    [nn+X]=A
+    case 0x95:
+        addr = (uint8_t)(arg0 + X);
+        tick(4);
+        PC += 2;
+        break;
+    // 8D nn nn ------  4   STA nnnn    MOV [nnnn],A    [nnnn]=A
+    case 0x8D:
+        addr = (((uint16_t)arg1) << 8) + arg0;
+        tick(4);
+        PC += 3;
+        break;
+    // 9D nn nn ------  5   STA nnnn,X  MOV [nnnn+X],A  [nnnn+X]=A
+    case 0x9D:
+        addr = (((uint16_t)arg1) << 8) + arg0 + X;
+        tick(5);
+        PC += 3;
+        break;
+    // 99 nn nn ------  5   STA nnnn,Y  MOV [nnnn+Y],A  [nnnn+Y]=A
+    case 0x99:
+        addr = (((uint16_t)arg1) << 8) + arg0 + Y;
+        tick(5);
+        PC += 3;
+        break;
+    // 81 nn    ------  6   STA (nn,X)  MOV [[nn+X]],A  [word[nn+X]]=A
+    case 0x81:
+        addr = read((uint8_t)(arg0 + X));
+        tick(6);
+        PC += 2;
+        break;
+    // 91 nn    ------  6   STA (nn),Y  MOV [[nn]+Y],A  [word[nn]+Y]=Y
+    case 0x91:
+        addr = read(arg0) + Y;
+        tick(6);
+        PC += 2;
+        break;
+    }
+    write(addr, A);
+    return 0; // Don't set any flags
+}
+
+uint8_t STY(uint8_t op, uint8_t arg0, uint8_t arg1)
+{
+    uint16_t addr = 0;
+
+    switch(op)
+    {
+    // 84 nn    ------  3   STY nn      MOV [nn],Y  [nn]=Y
+    case 0x85:
+        addr = arg0;
+        tick(3);
+        PC += 2;
+        break;
+    // 94 nn    ------  4   STY nn,X    MOV [nn+X],Y    [nn+X]=Y
+    case 0x94:
+        addr = (uint8_t)(arg0 + X);
+        tick(4);
+        PC += 2;
+        break;
+    // 8C nn nn ------  4   STY nnnn    MOV [nnnn],Y    [nnnn]=Y
+    case 0x8C:
+        addr = (((uint16_t)arg1) << 8) + arg0;
+        tick(4);
+        PC += 3;
+        break;
+    }
+    write(addr, Y);
+    return 0; // Don't set any flags
+}
+
+uint8_t STX(uint8_t op, uint8_t arg0, uint8_t arg1)
+{
+    uint16_t addr = 0;
+
+    switch(op)
+    {
+    // 86 nn    ------  3   STX nn      MOV [nn],X  [nn]=X
+    case 0x86:
+        addr = arg0;
+        tick(3);
+        PC += 2;
+        break;
+    // 96 nn    ------  4   STX nn,Y    MOV [nn+Y],X    [nn+Y]=X
+    case 0x96:
+        addr = (uint8_t)(arg0 + Y);
+        tick(4);
+        PC += 2;
+        break;
+    // 8E nn nn ------  4   STX nnnn    MOV [nnnn],X    [nnnn]=X
+    case 0x8E:
+        addr = (((uint16_t)arg1) << 8) + arg0;
+        tick(4);
+        PC += 3;
+        break;
+    }
+    write(addr, X);
+    return 0; // Don't set any flags
+}
                                                         // STY nn,X
                                                         // STY nnnn
 
 // .................................................
 // PUSH/PULL
 // .................................................
-uint8_t PHA(uint8_t op, uint8_t arg0, uint8_t arg1);    // PHA
+// 48       ------  3   PHA     PUSH A      [S]=A, S=S-1
+uint8_t PHA(uint8_t op, uint8_t arg0, uint8_t arg1)
+{
+    write(S, A);
+    --S;
+    tick(3);
+    PC += 1;
+    return 0;
+}
 uint8_t PHP(uint8_t op, uint8_t arg0, uint8_t arg1);    // PHP
 uint8_t PLA(uint8_t op, uint8_t arg0, uint8_t arg1);    // PLA
 uint8_t PLP(uint8_t op, uint8_t arg0, uint8_t arg1);    // PLP
