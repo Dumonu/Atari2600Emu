@@ -1,9 +1,9 @@
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
 #ifndef CPUROTSHIFT_H_
 #define CPUROTSHIFT_H_
 
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 // .................................................
 // SHIFT LEFT LOGICAL/ARITHMETIC

@@ -1,8 +1,12 @@
+#include "a2600.h"
 
 // .................................................
 // ADD MEMORY TO ACCUMULATOR WITH CARRY
 // .................................................
-uint8_t ADC(uint8_t op, uint8_t arg0, uint8_t arg1);    // ADC #nn
+uint8_t ADC(uint8_t op, uint8_t arg0, uint8_t arg1)
+{
+	return 1;
+}    // ADC #nn
                                                         // ADC nn
                                                         // ADC nn,X
                                                         // ADC nnnn
@@ -14,7 +18,10 @@ uint8_t ADC(uint8_t op, uint8_t arg0, uint8_t arg1);    // ADC #nn
 // .................................................
 // SUBTRACT MEMORY FROM ACCUMULATOR WITH BORROW
 // .................................................
-uint8_t SBC(uint8_t op, uint8_t arg0, uint8_t arg1);    // SBC #nn
+uint8_t SBC(uint8_t op, uint8_t arg0, uint8_t arg1)
+{
+	return 1;
+}    // SBC #nn
                                                         // SBC nn
                                                         // SBC nn,X
                                                         // SBC nnnn
@@ -26,7 +33,10 @@ uint8_t SBC(uint8_t op, uint8_t arg0, uint8_t arg1);    // SBC #nn
 // .................................................
 // LOGICAL AND MEMORY WITH ACCUMULATOR
 // .................................................
-uint8_t AND(uint8_t op, uint8_t arg0, uint8_t arg1);    // AND #nn
+uint8_t AND(uint8_t op, uint8_t arg0, uint8_t arg1)
+{
+	return 1;
+}    // AND #nn
                                                         // AND nn
                                                         // AND nn,X
                                                         // AND nnnn
@@ -38,7 +48,10 @@ uint8_t AND(uint8_t op, uint8_t arg0, uint8_t arg1);    // AND #nn
 // .................................................
 // EXCLUSIVE-OR MEMORY WITH ACCUMULATOR
 // .................................................
-uint8_t EOR(uint8_t op, uint8_t arg0, uint8_t arg1);    // EOR #nn
+uint8_t EOR(uint8_t op, uint8_t arg0, uint8_t arg1)
+{
+	return 1;
+}    // EOR #nn
                                                         // EOR nn
                                                         // EOR nn,X
                                                         // EOR nnnn
@@ -50,7 +63,10 @@ uint8_t EOR(uint8_t op, uint8_t arg0, uint8_t arg1);    // EOR #nn
 // .................................................
 // LOGICAL OR MEMORY WITH ACCUMULATOR
 // .................................................
-uint8_t ORA(uint8_t op, uint8_t arg0, uint8_t arg1);    // ORA #nn
+uint8_t ORA(uint8_t op, uint8_t arg0, uint8_t arg1)
+{
+	return 1;
+}    // ORA #nn
                                                         // ORA nn
                                                         // ORA nn,X
                                                         // ORA nnnn
@@ -62,7 +78,10 @@ uint8_t ORA(uint8_t op, uint8_t arg0, uint8_t arg1);    // ORA #nn
 // .................................................
 // COMPARE
 // .................................................
-uint8_t CMP(uint8_t op, uint8_t arg0, uint8_t arg1);    // CMP #nn
+uint8_t CMP(uint8_t op, uint8_t arg0, uint8_t arg1)
+{
+	return 1;
+}    // CMP #nn
                                                         // CMP nn
                                                         // CMP nn,X
                                                         // CMP nnnn
@@ -70,35 +89,62 @@ uint8_t CMP(uint8_t op, uint8_t arg0, uint8_t arg1);    // CMP #nn
                                                         // CMP nnnn,Y
                                                         // CMP (nn,X)
                                                         // CMP (nn),Y
-uint8_t CPX(uint8_t op, uint8_t arg0, uint8_t arg1);    // CPX #nn
+uint8_t CPX(uint8_t op, uint8_t arg0, uint8_t arg1)
+{
+	return 1;
+}    // CPX #nn
                                                         // CPX nn
                                                         // CPX nnnn
-uint8_t CPY(uint8_t op, uint8_t arg0, uint8_t arg1);    // CPY #nn
+uint8_t CPY(uint8_t op, uint8_t arg0, uint8_t arg1)
+{
+	return 1;
+}    // CPY #nn
                                                         // CPY nn
                                                         // CPY nnnn
 
 // .................................................
 // BIT TEST
 // .................................................
-uint8_t BIT(uint8_t op, uint8_t arg0, uint8_t arg1);    // BIT nn
+uint8_t BIT(uint8_t op, uint8_t arg0, uint8_t arg1)
+{
+	return 1;
+}    // BIT nn
                                                         // BIT nnnn
 
 // .................................................
 // INCREMENT BY ONE
 // .................................................
-uint8_t INC(uint8_t op, uint8_t arg0, uint8_t arg1);    // INC nn
+uint8_t INC(uint8_t op, uint8_t arg0, uint8_t arg1)
+{
+	return 1;
+}    // INC nn
                                                         // INC nn,X
                                                         // INC nnnn
                                                         // INC nnnn,X
-uint8_t INX(uint8_t op, uint8_t arg0, uint8_t arg1);    // INX
-uint8_t INY(uint8_t op, uint8_t arg0, uint8_t arg1);    // INY
+uint8_t INX(uint8_t op, uint8_t arg0, uint8_t arg1)
+{
+	return 1;
+}    // INX
+uint8_t INY(uint8_t op, uint8_t arg0, uint8_t arg1)
+{
+	return 1;
+}    // INY
 
 // .................................................
 // DECREMENT BY ONE
 // .................................................
-uint8_t DEC(uint8_t op, uint8_t arg0, uint8_t arg1);    // DEC nn
+uint8_t DEC(uint8_t op, uint8_t arg0, uint8_t arg1)
+{
+	return 1;
+}    // DEC nn
                                                         // DEC nn,X
                                                         // DEC nnnn
                                                         // DEC nnnn,X
-uint8_t DEX(uint8_t op, uint8_t arg0, uint8_t arg1);    // DEX
-uint8_t DEY(uint8_t op, uint8_t arg0, uint8_t arg1);    // DEY
+uint8_t DEX(uint8_t op, uint8_t arg0, uint8_t arg1)
+{
+	return 1;
+}    // DEX
+uint8_t DEY(uint8_t op, uint8_t arg0, uint8_t arg1)
+{
+	return 1;
+}    // DEY

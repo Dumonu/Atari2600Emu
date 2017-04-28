@@ -1,8 +1,9 @@
+#ifndef CPUMEMREGTRANS_H_
+#define CPUMEMREGTRANS_H_
+
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-#ifndef CPUMEMREGTRANS_H_
-#define CPUMEMREGTRANS_H_
 
 // .................................................
 // REGISTER/IMMEDITATE TO REGISTER TRANSFER

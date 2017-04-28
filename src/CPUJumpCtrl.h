@@ -1,8 +1,9 @@
+#ifndef CPUJUMPCTRL_H_
+#define CPUJUMPCTRL_H_
+
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-#ifndef CPUJUMPCTRL_H_
-#define CPUJUMPCTRL_H_
 
 // .................................................
 // NORMAL JUMPS & SUBROUTINE CALLS/RETURNS

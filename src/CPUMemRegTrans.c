@@ -77,6 +77,7 @@ uint8_t TXS(uint8_t op, uint8_t arg0, uint8_t arg1)
 uint8_t LDA(uint8_t op, uint8_t arg0, uint8_t arg1)
 {
     uint8_t src = 0;
+    uint16_t addr = 0;
     switch(op)
     {
     // A9 nn    nz----  2   LDA #nn  MOV A,nn   A=nn
@@ -99,21 +100,21 @@ uint8_t LDA(uint8_t op, uint8_t arg0, uint8_t arg1)
         break;
     // AD nn nn nz----  4   LDA nnnn    MOV A,[nnnn]    A=[nnnn]
     case 0xAD:
-        uint16_t addr = (((uint16_t)arg1) << 8) + arg0;
+        addr = (((uint16_t)arg1) << 8) + arg0;
         src = read(addr);
         tick(4);
         PC += 3;
         break;
     // BD nn nn nz----  4*  LDA nnnn,X  MOV A,[nnnn+X]  A=[nnnn+X]
     case 0xBD:
-        uint16_t addr = (((uint16_t)arg1) << 8) + arg0 + X;
+        addr = (((uint16_t)arg1) << 8) + arg0 + X;
         src = read(addr);
         tick((addr >> 8) > arg1 ? 5 : 4);
         PC += 3;
         break;
     // B9 nn nn nz----  4*  LDA nnnn,Y  MOV A,[nnnn+Y]  A=[nnnn+Y]
     case 0xB9:
-        uint16_t addr = (((uint16_t)arg1) << 8) + arg0 + X;
+        addr = (((uint16_t)arg1) << 8) + arg0 + X;
         src = read(addr);
         tick((addr >> 8) > arg1 ? 5 : 4);
         PC += 3;
@@ -126,7 +127,7 @@ uint8_t LDA(uint8_t op, uint8_t arg0, uint8_t arg1)
         break;
     // B1 nn    nz----  5*  LDA (nn),Y  MOV A,[[nn]+Y]  A=[word[nn]+Y]
     case 0xB1:
-        uint16_t addr = (uint16_t)(read(arg0 + 1) << 8) + read(arg0);
+        addr = (uint16_t)(read(arg0 + 1) << 8) + read(arg0);
         src = read(addr + Y);
         tick(((addr + Y) >> 8) > (addr >> 8) ? 6 : 5);
         PC += 2;
@@ -143,6 +144,7 @@ uint8_t LDA(uint8_t op, uint8_t arg0, uint8_t arg1)
 uint8_t LDX(uint8_t op, uint8_t arg0, uint8_t arg1)
 {
     uint8_t src = 0;
+    uint16_t addr = 0;
     switch(op)
     {
     // A2 nn    nz----  2   LDX #nn  MOV X,nn   X=nn
@@ -165,14 +167,14 @@ uint8_t LDX(uint8_t op, uint8_t arg0, uint8_t arg1)
         break;
     // AE nn nn nz----  4   LDX nnnn    MOV X,[nnnn]    X=[nnnn]
     case 0xAE:
-        uint16_t addr = (((uint16_t)arg1) << 8) + arg0;
+        addr = (((uint16_t)arg1) << 8) + arg0;
         src = read(addr);
         tick(4);
         PC += 3;
         break;
     // BE nn nn nz----  4*  LDX nnnn,Y  MOV X,[nnnn+Y]  X=[nnnn+Y]
     case 0xBE:
-        uint16_t addr = (((uint16_t)arg1) << 8) + arg0 + Y;
+        addr = (((uint16_t)arg1) << 8) + arg0 + Y;
         src = read(addr);
         tick((addr >> 8) > arg1 ? 5 : 4);
         PC += 3;
@@ -188,6 +190,7 @@ uint8_t LDX(uint8_t op, uint8_t arg0, uint8_t arg1)
 uint8_t LDY(uint8_t op, uint8_t arg0, uint8_t arg1)
 {
     uint8_t src = 0;
+    uint16_t addr = 0;
     switch(op)
     {
     // A0 nn    nz----  2   LDY #nn  MOV Y,nn   Y=nn
@@ -210,14 +213,14 @@ uint8_t LDY(uint8_t op, uint8_t arg0, uint8_t arg1)
         break;
     // AC nn nn nz----  4   LDY nnnn    MOV Y,[nnnn]    Y=[nnnn]
     case 0xAC:
-        uint16_t addr = (((uint16_t)arg1) << 8) + arg0;
+        addr = (((uint16_t)arg1) << 8) + arg0;
         src = read(addr);
         tick(4);
         PC += 3;
         break;
     // BC nn nn nz----  4*  LDY nnnn,X  MOV Y,[nnnn+X]  Y=[nnnn+X]
     case 0xBC:
-        uint16_t addr = (((uint16_t)arg1) << 8) + arg0 + X;
+        addr = (((uint16_t)arg1) << 8) + arg0 + X;
         src = read(addr);
         tick((addr >> 8) > arg1 ? 5 : 4);
         PC += 3;
@@ -359,6 +362,15 @@ uint8_t PHA(uint8_t op, uint8_t arg0, uint8_t arg1)
     PC += 1;
     return 0;
 }
-uint8_t PHP(uint8_t op, uint8_t arg0, uint8_t arg1);    // PHP
-uint8_t PLA(uint8_t op, uint8_t arg0, uint8_t arg1);    // PLA
-uint8_t PLP(uint8_t op, uint8_t arg0, uint8_t arg1);    // PLP
+uint8_t PHP(uint8_t op, uint8_t arg0, uint8_t arg1)
+{
+	return 1;
+}    // PHP
+uint8_t PLA(uint8_t op, uint8_t arg0, uint8_t arg1)
+{
+	return 1;
+}    // PLA
+uint8_t PLP(uint8_t op, uint8_t arg0, uint8_t arg1)
+{
+	return 1;
+}    // PLP

@@ -1,8 +1,9 @@
+#ifndef CPUARITHLOGOPS_H_
+#define CPUARITHLOGOPS_H_
+
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-#ifndef CPUARITHLOGOPS_H_
-#define CPUARITHLOGOPS_H_
 
 // .................................................
 // ADD MEMORY TO ACCUMULATOR WITH CARRY
