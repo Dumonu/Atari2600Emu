@@ -29,14 +29,20 @@ Opcode matrix declaration.
 2-byte memory addressing with `read()` and `write()` functions to allow properly handled memory-mapped I/O devices.
 
 The following opcodes:
-* TAY
-* TAX
-* TSX
-* TYA
-* TXA
-* TXS
-* LDA
-* LDX
+* CPU Memory and Register Transfers
+    * TAY
+    * TAX
+    * TSX
+    * TYA
+    * TXA
+    * TXS
+    * LDA
+    * LDX
+    * LDY
+    * STA
+    * STY
+    * STX
+    * PHA
 
 ## To be Implemented:
 
@@ -61,10 +67,11 @@ Reading from a ROM File
 ## Usage and Compilation
 
 As of right now, the Atari 2600 Emulator is in an extremely early stage of development.
-As such, it does not even have a `main()` function. Therefore, you may attempt to compile,
-but doing so would most likely be superfluous. By extension, there is, as of yet, no known
-means of using the Atari 2600 Emulator.
+The debug.c `main()` will read in a binary file used to test the opcode development.
 
-If you must use it, the proper manner, insofar as there may or may not be one, is:
-    
-    vim a2600.c
+### To compile:
+> cd src
+> make
+
+### To use:
+> ./debug ../test/test0.bin
