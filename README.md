@@ -70,7 +70,7 @@ As of right now, the Atari 2600 Emulator is in an extremely early stage of devel
 The debug.c `main()` will read in a binary file used to test the opcode development.
 
 ### To compile:
-> cd src 
+> cd src <br />
 > make
 
 ### To use:
