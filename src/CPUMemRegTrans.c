@@ -297,7 +297,7 @@ uint8_t STY(uint8_t op, uint8_t arg0, uint8_t arg1)
     switch(op)
     {
     // 84 nn    ------  3   STY nn      MOV [nn],Y  [nn]=Y
-    case 0x85:
+    case 0x84:
         addr = arg0;
         tick(3);
         PC += 2;
