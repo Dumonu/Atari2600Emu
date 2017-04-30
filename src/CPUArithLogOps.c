@@ -3,9 +3,24 @@
 // .................................................
 // ADD MEMORY TO ACCUMULATOR WITH CARRY
 // .................................................
+// NOTE: ADC and SBC are affected by D-flag
 uint8_t ADC(uint8_t op, uint8_t arg0, uint8_t arg1)
 {
-	return 1;
+    uint8_t addend = 0;
+
+    // GET ADDEND HERE;
+
+    uint8_t 
+    uint16_t temp = A + addend + (P & 0x01);    //A=A+addend+carry
+    A = (uint8_t)temp;
+    P = P & 0b00111100;                         // zero-out the N,V,Z, and C flags
+    P = P | (A & 0b10000000);                   // Negative/Sign Flag
+    P = P | 0b0;                                // Overflow Flag TODO
+    P = P | (A != 0 ? 0x00 : 0x02);             //Zero Flag
+    P = P | (temp > (uint16_t)A ? 0x01 : 0x00); //Carry Flag
+
+
+	return 0;
 }    // ADC #nn
                                                         // ADC nn
                                                         // ADC nn,X
