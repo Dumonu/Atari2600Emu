@@ -35,7 +35,8 @@ int main(int argc, char **argv)
 
     fclose(in);
 
-    PC = 0xF000;
+    initCPU();
+
     int r;
     while(r == 0)
     {

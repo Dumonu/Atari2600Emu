@@ -356,21 +356,33 @@ uint8_t STX(uint8_t op, uint8_t arg0, uint8_t arg1)
 // 48       ------  3   PHA     PUSH A      [S]=A, S=S-1
 uint8_t PHA(uint8_t op, uint8_t arg0, uint8_t arg1)
 {
-    write(S, A);
-    --S;
+    write(0x0100 | S--, A);
     tick(3);
     PC += 1;
     return 0;
 }
+
+// 08       ------  3   PHP     PUSH P      [S]=P, S=S-1 (flags)
 uint8_t PHP(uint8_t op, uint8_t arg0, uint8_t arg1)
 {
-	return 1;
-}    // PHP
+    write(0x0100 | S--, P);
+    tick(3);
+    PC += 1;
+	return 0;
+}    
+
+// 68       nz----  3   PLA     POP A       S=S+1, A=[S]
 uint8_t PLA(uint8_t op, uint8_t arg0, uint8_t arg1)
 {
-	return 1;
-}    // PLA
+    A = read(0x0100 | ++S);
+    P = P & 0x7D;                   // 0 out the Flags we're setting
+    P = P | (A & 0x80);             // Negative/Sign Flag
+    P = P | (A != 0 ? 0x00 : 0x02); // Zero Flag
+	return 0;
+}   
+// 28       nzcidv  3   PLP     POP P       S=S+1, P=[S]
 uint8_t PLP(uint8_t op, uint8_t arg0, uint8_t arg1)
 {
-	return 1;
-}    // PLP
+    P = read(0x0100 | ++S);
+	return 0;
+}    

@@ -23,13 +23,13 @@ int8_t tick(uint8_t cycles)
 // ................................................................................................
 uint8_t ill(uint8_t op, uint8_t arg0, uint8_t arg1)
 {
-    fprintf(stderr, "Illegal Opcode Called, may be implemented in the future for completeness");
+    fprintf(stderr, "%s\n", "Illegal Opcode Called, may be implemented in the future for completeness");
     exit(1);
 }
 
 uint8_t und(uint8_t op, uint8_t arg0, uint8_t arg1)
 {
-    fprintf(stderr, "Undefined Opcode Called");
+    fprintf(stderr, "%s\n", "Undefined Opcode Called");
     exit(1);
 }
 
@@ -54,6 +54,19 @@ uint8_t (*ops[16][16])(uint8_t op, uint8_t arg0, uint8_t arg1) = {
     {CPX, SBC, ill, und, CPX, SBC, INC, INC, INX, SBC, NOP, ill, CPX, SBC, INC, und},
     {BEQ, SBC, ill, und, ill, SBC, INC, und, SED, SBC, ill, und, ill, SBC, INC, und}
 };
+
+// ................................................................................................
+// Initialize CPU to Default Values
+// ................................................................................................
+int initCPU()
+{
+    A = 0;
+    X = 0;
+    Y = 0;
+    PC = 0xF000;
+    S = 0xFF;
+    P = 0x20;
+}
 
 // ................................................................................................
 // MEMORY I/O
