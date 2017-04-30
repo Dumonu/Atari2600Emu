@@ -30,19 +30,6 @@ Opcode matrix declaration.
 
 The following opcodes:
 * CPU Memory and Register Transfers
-    * TAY
-    * TAX
-    * TSX
-    * TYA
-    * TXA
-    * TXS
-    * LDA
-    * LDX
-    * LDY
-    * STA
-    * STY
-    * STX
-    * PHA
 
 ## To be Implemented:
 
