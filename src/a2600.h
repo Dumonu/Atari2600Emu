@@ -11,13 +11,13 @@
 #include "CPUJumpCtrl.h"
 
 // FORWARD DECLARE SILLY THINGS
-struct timespec
-{
-    time_t tv_sec;  /* seconds */
-    long tv_nsec;   /* nanoseconds */
-};
-
-int nanosleep(const struct timespec *req, struct timespec *rem);
+//struct timespec
+//{
+//    time_t tv_sec;  /* seconds */
+//    long tv_nsec;   /* nanoseconds */
+//};
+//
+//int nanosleep(const struct timespec *req, struct timespec *rem);
 
 // ................................................................................................
 // 65XX CPU

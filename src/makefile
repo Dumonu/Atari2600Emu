@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -std=c99 -g
+CFLAGS = -std=c99 -g `sdl2-config --cflags --libs`
 OBJ = CPUArithLogOps.o CPUJumpCtrl.o CPUMemRegTrans.o CPURotShift.o a2600.o
 HEAD = CPUArithLogOps.h CPUJumpCtrl.h CPUMemRegTrans.h CPURotShift.h a2600.h
 
