@@ -10,17 +10,57 @@ uint8_t ADC(uint8_t op, uint8_t arg0, uint8_t arg1)
 
     // GET ADDEND HERE;
 
-    uint8_t 
-    uint16_t temp = A + addend + (P & 0x01);    //A=A+addend+carry
-    A = (uint8_t)temp;
     P = P & 0b00111100;                         // zero-out the N,V,Z, and C flags
-    P = P | (A & 0b10000000);                   // Negative/Sign Flag
-    P = P | 0b0;                                // Overflow Flag TODO
-    P = P | (A != 0 ? 0x00 : 0x02);             //Zero Flag
-    P = P | (temp > (uint16_t)A ? 0x01 : 0x00); //Carry Flag
 
+    //Deal with BCD mode here
+    if(P & 0b00001000) // if D-flag is set
+    {
+        // A: Seq. 1
+        // C: Seq. 1
+        // N: Seq. 2
+        // Z: bin
 
-	return 0;
+        // Seq. 1
+        // 1a. AL = (A & 0x0F) + (B & 0x0F) + C
+        // 1b. If AL >= 0x0A, then AL = ((AL + 0x06) & 0x0F) + 0x10
+        // 1c. A = (A & 0xF0) + (B & 0xF0) + AL
+        // 1d. Note that A can be >= 0x100 at this point
+        // 1e. If (A >= 0xA0), then A = A + 0x60
+        // 1f. The accumulator result is the lower 8  bits of A
+        // 1g. The carry result is 1 if A >= 0x100, and is 0 if A < 0x100
+
+        // Seq. 2
+        // 2a. AL = (A & 0x0F) + (B & 0x0F) + C
+        // 2b. If AL >= 0x0A, then AL = ((AL + 0x06) & 0x0F) + 0x10
+        // 2c. A = (A & 0xF0) + (B & 0xF0) + AL, using signed arithmetic
+        // 2d. The N flag result is 1 if bit 7 of A is 1, and is 0 if bit 7 of A is 0
+        // 2e. The V flag result is 1 if A < -128 or A > 127, and is 0 if -128 <= A <= 127
+
+        uint16_t AL = (A & 0x0F) + (addend & 0x0F) + (P & 0x01);
+        if(AL >= 0x0A)
+            AL = ((AL + 0x06) & 0x0F) + 0x10;
+        uint16_t temp = (A & 0xF0) + (addend & 0xF0) + AL;
+        int16_t sTemp = (int8_t)(A & 0xF0) + (int8_t)(addend & 0xF0) + (int16_t)AL;
+        P = P | (temp & 0b10000000);    // Negative/Sign Flag
+        P = P | (sTemp < -128 || sTemp > 127 ? 0b01000000 : 0x00); // Overflow flag
+        if(temp >= 0xA0)
+            temp = temp + 0x60;
+        A = (uint8_t)temp;
+        P = P | ((A + addend + (P & 0x01)) != 0 ? 0x00 : 0x02); // Zero Flag
+        P = P | (temp >= 0x100 ? 0x01 : 0x00);  //Carry Flag
+
+    }
+    else
+    {
+        uint16_t temp = A + addend + (P & 0x01);    //A=A+addend+carry
+        int16_t sTemp = (int8_t)A + (int8_t)addend + (P & 0x01);
+        A = (uint8_t)temp;
+        P = P | (A & 0b10000000);                                   // Negative/Sign Flag
+        P = P | (sTemp < -128 || sTemp > 127 ? 0b01000000 : 0x00);  // Overflow Flag
+        P = P | (A != 0 ? 0x00 : 0x02);                             //Zero Flag
+        P = P | (temp >= 0x100 ? 0x01 : 0x00);                      //Carry Flag
+    }
+	return 1;
 }    // ADC #nn
                                                         // ADC nn
                                                         // ADC nn,X
