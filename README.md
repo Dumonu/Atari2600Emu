@@ -73,7 +73,7 @@ you must install it before compiling this project.
     sudo emerge libsdl2
 
 Disclaimer: I run Arch Linux, so I do not guarantee that I put the correct packages
-for other distributions. When in doubt, of if I did not list your distribution here,
+for other distributions. When in doubt, if I did not list your distribution here,
 check your distribution's package manager/wiki.
 
 ### To compile:
