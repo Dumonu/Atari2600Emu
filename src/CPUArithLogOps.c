@@ -9,6 +9,61 @@ uint8_t ADC(uint8_t op, uint8_t arg0, uint8_t arg1)
     uint8_t addend = 0;
 
     // GET ADDEND HERE;
+    uint16_t addr = 0;
+    switch(op)
+    {
+    // 69 nn    nzc--v  2   ADC #nn     ADC A,nn        A=A+C+nn
+    case 0x69:
+        addend = arg0;
+        tick(2);
+        PC += 2;
+        break;
+    // 65 nn    nzc--v  3   ADC nn      ADC A,[nn]      A=A+C+[nn]
+    case 0x65:
+        addend = read(arg0);
+        tick(3);
+        PC += 2;
+        break;
+    // 75 nn    nzc--v  4   ADC nn,X    ADC A,[nn+X]    A=A+C+[nn+X]
+    case 0x75:
+        addend = read((uint8_t)(arg0 + X));
+        tick(4);
+        PC += 2;
+        break; 
+    // 6D nn nn nzc--v  4   ADC nnnn    ADC A,[nnnn]    A=A+C+[nnnn]
+    case 0x6D:
+        addend = read((((uint16_t)arg1) << 8) + arg0);
+        tick(4);
+        PC += 3;
+        break;
+    // 7D nn nn nzc--v  4*  ADC nnnn,X  ADC A,[nnnn+X]  A=A+C+[nnnn+X]
+    case 0x7D:
+        addr = (((uint16_t)arg1) << 8) + arg0 + X;
+        addend = read(addr);
+        tick((addr >> 8) > arg1 ? 5 : 4);
+        PC += 3;
+        break;
+    // 79 nn nn nzc--v  4*  ADC nnnn,Y  ADC A,[nnnn+Y]  A=A+C+[nnnn+Y]
+    case 0x79:
+        addr = (((uint16_t)arg1) << 8) + arg0 + Y;
+        addend = read(addr);
+        tick((addr >> 8) > arg1 ? 5 : 4);
+        PC += 3;
+        break;
+    // 61 nn    nzc--v  6   ADC (nn,X)  ADC A,[[nn+X]]  A=A+C+[word[nn+X]]
+    case 0x61:
+        addend = read(((uint16_t)(read(arg0 + X + 1)) << 8) + read(arg0 + X));
+        tick(6);
+        PC += 2;
+        break;
+    // 71 nn    nzc--v  5*  ADC (nn),Y  ADC A,[[nn]+Y]  A=A+C+[word[nn]+Y]
+    case 0x71:
+        addr = (uint16_t)(read(arg0 + 1) << 8) + read(arg0);
+        addend = read(addr + Y);
+        tick(((addr + Y) >> 8) > (addr >> 8) ? 6 : 5);
+        PC += 2;
+        break; 
+    }
 
     P = P & 0b00111100;                         // zero-out the N,V,Z, and C flags
 
@@ -61,14 +116,7 @@ uint8_t ADC(uint8_t op, uint8_t arg0, uint8_t arg1)
         P = P | (temp >= 0x100 ? 0x01 : 0x00);                      //Carry Flag
     }
 	return 1;
-}    // ADC #nn
-                                                        // ADC nn
-                                                        // ADC nn,X
-                                                        // ADC nnnn
-                                                        // ADC nnnn,X
-                                                        // ADC nnnn,Y
-                                                        // ADC (nn,X)
-                                                        // ADC (nn),Y
+}    
 
 // .................................................
 // SUBTRACT MEMORY FROM ACCUMULATOR WITH BORROW
