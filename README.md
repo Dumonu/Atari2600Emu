@@ -31,7 +31,8 @@ Opcode matrix declaration.
 The following opcodes:
 * CPU Memory and Register Transfers
 * CPU Arithmetic/Logical Operations
-    * ADC - Mostly
+    * ADC
+    * SBC
 
 ## To be Implemented:
 
