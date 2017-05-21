@@ -35,7 +35,7 @@ The following opcodes:
 
 ## To be Implemented:
 
-The rest of the opcodes.
+The rest of the opcodes. - Add dummy read/write cycles on page crossing.
 
 Memory and I/O Map
 
