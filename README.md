@@ -31,12 +31,10 @@ Opcode matrix declaration.
 The following opcodes:
 * CPU Memory and Register Transfers
 * CPU Arithmetic/Logical Operations
-    * ADC
-    * SBC
 
 ## To be Implemented:
 
-The rest of the opcodes. - Add dummy read/write cycles on page crossing.
+The rest of the opcodes. - Add dummy read/write cycles on page crossing. <- I think I've done this, but I'm not sure. I'll check at some point.
 
 Memory and I/O Map
 
