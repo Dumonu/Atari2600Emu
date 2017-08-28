@@ -24,13 +24,15 @@ int8_t tick(uint8_t cycles)
 uint8_t ill(uint8_t op, uint8_t arg0, uint8_t arg1)
 {
     fprintf(stderr, "%s\n", "Illegal Opcode Called, may be implemented in the future for completeness");
-    exit(1);
+    return 1;
+ // exit(1);
 }
 
 uint8_t und(uint8_t op, uint8_t arg0, uint8_t arg1)
 {
     fprintf(stderr, "%s\n", "Undefined Opcode Called");
-    exit(1);
+    return 1;
+ // exit(1);
 }
 
 // ................................................................................................

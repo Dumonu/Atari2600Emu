@@ -218,7 +218,7 @@ uint8_t SBC(uint8_t op, uint8_t arg0, uint8_t arg1)
     P = P | (temp & 0b10000000);                                   // Negative/Sign Flag
     P = P | (sTemp < -128 || sTemp > 127 ? 0b01000000 : 0x00);  // Overflow Flag
     P = P | (temp != 0 ? 0x00 : 0x02);                             //Zero Flag
-    P = P | (stemp < 0 ? 0x01 : 0x00);                      //Carry Flag
+    P = P | (sTemp < 0 ? 0x01 : 0x00);                      //Carry Flag
 
     //Deal with BCD mode here
     if(P & 0b00001000) // if D-flag is set
@@ -592,7 +592,7 @@ uint8_t CMP(uint8_t op, uint8_t arg0, uint8_t arg1)
     int16_t sTemp = (int8_t)A - (int8_t)subtrahend;
     P = P | (temp & 0b10000000);                                   // Negative/Sign Flag
     P = P | (temp != 0 ? 0x00 : 0x02);                             //Zero Flag
-    P = P | (stemp < 0 ? 0x01 : 0x00);                      //Carry Flag
+    P = P | (sTemp < 0 ? 0x01 : 0x00);                      //Carry Flag
 
 	return 0;
 }    
@@ -630,7 +630,7 @@ uint8_t CPX(uint8_t op, uint8_t arg0, uint8_t arg1)
     int16_t sTemp = (int8_t)X - (int8_t)subtrahend;
     P = P | (temp & 0b10000000);                                   // Negative/Sign Flag
     P = P | (temp != 0 ? 0x00 : 0x02);                             //Zero Flag
-    P = P | (stemp < 0 ? 0x01 : 0x00);                      //Carry Flag
+    P = P | (sTemp < 0 ? 0x01 : 0x00);                      //Carry Flag
 
 	return 0;
 }   
@@ -668,7 +668,7 @@ uint8_t CPY(uint8_t op, uint8_t arg0, uint8_t arg1)
     int16_t sTemp = (int8_t)Y - (int8_t)subtrahend;
     P = P | (temp & 0b10000000);                                   // Negative/Sign Flag
     P = P | (temp != 0 ? 0x00 : 0x02);                             //Zero Flag
-    P = P | (stemp < 0 ? 0x01 : 0x00);                      //Carry Flag
+    P = P | (sTemp < 0 ? 0x01 : 0x00);                      //Carry Flag
 
 	return 0;
 }    
@@ -709,25 +709,25 @@ uint8_t INC(uint8_t op, uint8_t arg0, uint8_t arg1)
     switch(op)
     {
     // E6 nn    nz----  5   INC nn      INC [nn]        [nn]=[nn]+1
-    case E6:
+    case 0xE6:
         addr = (uint16_t)arg0;
         PC += 2;
         tick(5);
         break;
     // F6 nn    nz----  6   INC nn,X    INC [nn+X]      [nn+X]=[nn+X]+1
-    case F6:
+    case 0xF6:
         addr = (uint16_t)(arg0 + X);
         PC += 2;
         tick(6);
         break;
     // EE nn nn nz----  6   INC nnnn    INC [nnnn]      [nnnn]=[nnnn]+1
-    case EE:
+    case 0xEE:
         addr = (((uint16_t)arg1) << 8) + arg0;
         PC += 3;
         tick(6);
         break;
     // FE nn nn nz----  7   INC nnnn,X  INC [nnnn+X]    [nnnn+X]=[nnnn+X]+1
-    case FE:
+    case 0xFE:
         addr = (((uint16_t)arg1) << 8) + arg0 + X;
         PC += 3;
         tick(7);
@@ -775,25 +775,25 @@ uint8_t DEC(uint8_t op, uint8_t arg0, uint8_t arg1)
     switch(op)
     {
     // C6 nn    nz----  5   DEC nn      DEC [nn]        [nn]=[nn]+1
-    case C6:
+    case 0xC6:
         addr = (uint16_t)arg0;
         PC += 2;
         tick(5);
         break;
     // D6 nn    nz----  6   DEC nn,X    DEC [nn+X]      [nn+X]=[nn+X]+1
-    case D6:
+    case 0xD6:
         addr = (uint16_t)(arg0 + X);
         PC += 2;
         tick(6);
         break;
     // CE nn nn nz----  6   DEC nnnn    DEC [nnnn]      [nnnn]=[nnnn]+1
-    case CE:
+    case 0xCE:
         addr = (((uint16_t)arg1) << 8) + arg0;
         PC += 3;
         tick(6);
         break;
     // DE nn nn nz----  7   DEC nnnn,X  DEC [nnnn+X]    [nnnn+X]=[nnnn+X]+1
-    case DE:
+    case 0xDE:
         addr = (((uint16_t)arg1) << 8) + arg0 + X;
         PC += 3;
         tick(7);

@@ -37,7 +37,7 @@ int main(int argc, char **argv)
 
     initCPU();
 
-    int r;
+    int r = 0;
     while(r == 0)
     {
         uint8_t op = read(PC);
@@ -46,4 +46,21 @@ int main(int argc, char **argv)
         r = (*ops[op>>4][op & 0xF])(op, a0, a1);
         printf("A: %x\tX: %x\tY: %x\tPC: %x\tS: %x\tP: %s\n", A, X, Y, PC, S, Ptob());
     }
+
+    FILE *out = fopen("../dump/mem.bin", "w");
+    if(!out)
+    {
+        perror("Failure creating file");
+        return errno;
+    }
+
+    for(int i = 0; i < 0xFFFF; ++i)
+    {
+        if(putc(read(i), out) == EOF)
+        {
+            perror("Write failed");
+        }
+    }
+    fclose(out);
+    return 0;
 }
