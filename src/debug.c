@@ -47,7 +47,7 @@ int main(int argc, char **argv)
         printf("A: %x\tX: %x\tY: %x\tPC: %x\tS: %x\tP: %s\n", A, X, Y, PC, S, Ptob());
     }
 
-    FILE *out = fopen("../dump/mem.bin", "w");
+    FILE *out = fopen("dump/mem.bin", "w");
     if(!out)
     {
         perror("Failure creating file");
