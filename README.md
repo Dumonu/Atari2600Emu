@@ -76,8 +76,7 @@ for other distributions. When in doubt, if I did not list your distribution here
 check your distribution's package manager/wiki.
 
 ### To compile:
-    cd src
     make
 
 ### To use:
-    ./debug ../test/test0.bin
+    ./debug ./test/test0.bin
