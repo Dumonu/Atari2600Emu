@@ -2,10 +2,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include "CPUMemRegTrans.h"
-#include "CPUArithLogOps.h"
-#include "CPURotShift.h"
-#include "CPUJumpCtrl.h"
+#include "CPU65xx/CPUMemRegTrans.h"
+#include "CPU65xx/CPUArithLogOps.h"
+#include "CPU65xx/CPURotShift.h"
+#include "CPU65xx/CPUJumpCtrl.h"
 #include "a2600.h"
 
 

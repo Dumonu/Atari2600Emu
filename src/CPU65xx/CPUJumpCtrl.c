@@ -1,4 +1,4 @@
-#include "a2600.h"
+#include "../a2600.h"
 
 // .................................................
 // NORMAL JUMPS & SUBROUTINE CALLS/RETURNS
