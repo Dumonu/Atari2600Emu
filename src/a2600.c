@@ -7,15 +7,22 @@
 #include "CPU65xx/CPURotShift.h"
 #include "CPU65xx/CPUJumpCtrl.h"
 #include "a2600.h"
+#include "clock.h"
 
 
 int8_t tick(uint8_t cycles)
 {
-    // The Atari 2600 contains a 1.19 Mhz 65xx Processor
-    // That means that each clock cycle takes 840 nanoseconds, so do that.
-    long ns = cycles * 840;
-    struct timespec delay = {0, ns};
-    return nanosleep(&delay, NULL);
+//  // The Atari 2600 contains a 1.19 Mhz 65xx Processor
+//  // That means that each clock cycle takes 840 nanoseconds, so do that.
+//  long ns = cycles * 840;
+//  struct timespec delay = {0, ns};
+//  return nanosleep(&delay, NULL);
+    // New system, probably going to end up removing cycles.
+    for(int i = 0; i < cycles; ++i)
+    {
+        while(!CPUTick);    // Wait for a signal from clock thread
+        CPUTick = 0;        // Reset signal
+    }
 }
 
 // ................................................................................................
@@ -62,6 +69,8 @@ uint8_t (*ops[16][16])(uint8_t op, uint8_t arg0, uint8_t arg1) = {
 // ................................................................................................
 int initCPU()
 {
+    done = 0;
+
     A = 0;
     X = 0;
     Y = 0;

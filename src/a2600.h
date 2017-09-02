@@ -10,14 +10,7 @@
 #include "CPU65xx/CPURotShift.h"
 #include "CPU65xx/CPUJumpCtrl.h"
 
-// FORWARD DECLARE SILLY THINGS
-//struct timespec
-//{
-//    time_t tv_sec;  /* seconds */
-//    long tv_nsec;   /* nanoseconds */
-//};
-//
-//int nanosleep(const struct timespec *req, struct timespec *rem);
+uint8_t done; // 1 if we're finished and need to end threads.
 
 // ................................................................................................
 // 65XX CPU

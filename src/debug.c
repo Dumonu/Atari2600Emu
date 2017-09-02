@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <omp.h>
 #include "a2600.h"
+#include "clock.h"
 
 char *Ptob()
 {
@@ -36,15 +38,25 @@ int main(int argc, char **argv)
     fclose(in);
 
     initCPU();
+    initClk();
 
-    int r = 0;
-    while(r == 0)
+#pragma omp parallel num_threads (2)
     {
-        uint8_t op = read(PC);
-        uint8_t a0 = read(PC + 1);
-        uint8_t a1 = read(PC + 2);
-        r = (*ops[op>>4][op & 0xF])(op, a0, a1);
-        printf("A: %x\tX: %x\tY: %x\tPC: %x\tS: %x\tP: %s\n", A, X, Y, PC, S, Ptob());
+        if(omp_get_thread_num() == 1)
+            clkTick();
+        else
+        {
+            int r = 0;
+            while(r == 0)
+            {
+                uint8_t op = read(PC);
+                uint8_t a0 = read(PC + 1);
+                uint8_t a1 = read(PC + 2);
+                r = (*ops[op>>4][op & 0xF])(op, a0, a1);
+                printf("A: %x\tX: %x\tY: %x\tPC: %x\tS: %x\tP: %s\n", A, X, Y, PC, S, Ptob());
+            }
+            done = 1;
+        }
     }
 
     FILE *out = fopen("dump/mem.bin", "w");
