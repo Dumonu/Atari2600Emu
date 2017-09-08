@@ -5,6 +5,7 @@
 // .................................................
 uint8_t ASL(uint8_t op, uint8_t arg0, uint8_t arg1)
 {
+
 	return 1;
 }    // ASL A
                                                         // ASL nn
