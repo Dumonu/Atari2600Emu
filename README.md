@@ -2,6 +2,17 @@
 
 This is an Atari 2600 emulator currently under development in C.
 
+## Refactoring
+
+I was someone silly when I first wrote the code for the OpCodes. From here, I'm going to refactor the opcode
+functions in the following ways:
+* No more multiple instances of functions in the OpCode array.
+* No more silly switch statement on the OpCode.
+* Remove the OpCode itself from the function parameters, we won't need it because it'll be a unique function for each OpCode.
+* New function name format: `XXX_nn`, where `XXX` is the name of the command and `nn` is the OpCode in hexadecimal.
+
+This will greatly improve the overall readability of the OpCode functions.
+
 ## Currently Implemented:
 
 6502 CPU Registers  
