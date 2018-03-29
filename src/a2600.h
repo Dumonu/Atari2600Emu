@@ -64,15 +64,15 @@ int8_t tick(uint8_t cycles);
 // ................................................................................................
 // ILLEGAL AND UNDEFINED OPCODES
 // ................................................................................................
-uint8_t ill(uint8_t op, uint8_t arg0, uint8_t arg1);
-uint8_t und(uint8_t op, uint8_t arg0, uint8_t arg1);
+uint8_t ill_op(uint8_t arg0, uint8_t arg1);
+uint8_t und_op(uint8_t arg0, uint8_t arg1);
 
 // ................................................................................................
 // OPCODE TABLE
 // ................................................................................................
 // Points to functions representing Assembly Pneumonics
 // Found in other Files
-uint8_t (*ops[16][16])(uint8_t op, uint8_t arg0, uint8_t arg1);
+uint8_t (*ops[16][16])(uint8_t arg0, uint8_t arg1);
 
 
 // ................................................................................................
