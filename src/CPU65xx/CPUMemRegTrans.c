@@ -5,7 +5,7 @@
 // REGISTER/IMMEDITATE TO REGISTER TRANSFER
 // .................................................
 // A8       nz----  2   TAY     MOV Y,A     Y=A
-uint8_t TAY(uint8_t op, uint8_t arg0, uint8_t arg1)
+uint8_t TAY_A8(uint8_t arg0, uint8_t arg1)
 {
     Y = A;                          // Y = A
     P = P & 0x7D;                   // 0 out the Flags we're setting
@@ -16,7 +16,7 @@ uint8_t TAY(uint8_t op, uint8_t arg0, uint8_t arg1)
     return 0;
 }    
 // AA       nz----  2   TAX     MOV X,A     X=A
-uint8_t TAX(uint8_t op, uint8_t arg0, uint8_t arg1)
+uint8_t TAX_AA(uint8_t arg0, uint8_t arg1)
 {
     X = A;                          // X = A
     P = P & 0x7D;                   // 0 out the Flags we're setting
@@ -27,7 +27,7 @@ uint8_t TAX(uint8_t op, uint8_t arg0, uint8_t arg1)
     return 0;
 }
 // BA       nz----  2   TSX     MOV X,S     X=S
-uint8_t TSX(uint8_t op, uint8_t arg0, uint8_t arg1)
+uint8_t TSX_BA(uint8_t arg0, uint8_t arg1)
 {
     X = S;                          // Y = A
     P = P & 0x7D;                   // 0 out the Flags we're setting
@@ -38,7 +38,7 @@ uint8_t TSX(uint8_t op, uint8_t arg0, uint8_t arg1)
     return 0;
 }
 // 98       nz----  2   TYA     MOV A,Y     A=Y
-uint8_t TYA(uint8_t op, uint8_t arg0, uint8_t arg1)
+uint8_t TYA_98(uint8_t arg0, uint8_t arg1)
 {
     A = Y;                          // A = Y
     P = P & 0x7D;                   // 0 out the Flags we're setting
@@ -49,7 +49,7 @@ uint8_t TYA(uint8_t op, uint8_t arg0, uint8_t arg1)
     return 0;
 }
 // 8A       nz----  2   TXA     MOV A,X     A=X
-uint8_t TXA(uint8_t op, uint8_t arg0, uint8_t arg1)
+uint8_t TXA_8A(uint8_t arg0, uint8_t arg1)
 {
     A = X;                          // A = X
     P = P & 0x7D;                   // 0 out the Flags we're setting
@@ -60,7 +60,7 @@ uint8_t TXA(uint8_t op, uint8_t arg0, uint8_t arg1)
     return 0;
 }
 // 9A       ------  2   TXS     MOV S,X     S=X
-uint8_t TXS(uint8_t op, uint8_t arg0, uint8_t arg1)
+uint8_t TXS_9A(uint8_t arg0, uint8_t arg1)
 {
     S = X;                          // A = Y
     ++PC;
